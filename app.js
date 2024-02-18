@@ -16,7 +16,7 @@ const cookieParser = require('cookie-parser');
 
 // Environment variables
 const PORT = process.env.PORT || 3001;
-const CONNECTION_STRING = `${process.env.CONNECTION_URI}/${process.env.DATABASE_NAME}`;
+const CONNECTION_STRING = process.env.CONNECTION_URI;
 
 // Connect the database
 db.connect(CONNECTION_STRING)
@@ -36,6 +36,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Routes
+app.get('/', (req, res) => {
+  res.send('Hello from E-Commerce API');
+});
+
 // user authentication routes
 app.use("/api/user/", userRouter);
 
@@ -46,7 +51,7 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 
 // Protected route
-app.get('/', verifyAccessToken, async (req, res, next) => {
+app.get('/protected', verifyAccessToken, async (req, res, next) => {
   res.send('Hello Im a protected route');
 })
 
